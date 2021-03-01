@@ -46,7 +46,6 @@ export class ConnectionManager {
       let buffer = payload
 
       if (topic.substring(0, 2) == "gz") {
-          console.log("incoming gzip topic: " + topic)
         // gzip buffer
         buffer = gunzipSync(payload)
       }

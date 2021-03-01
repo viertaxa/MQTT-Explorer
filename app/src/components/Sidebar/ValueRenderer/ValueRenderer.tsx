@@ -8,9 +8,6 @@ import { default as ReactResizeDetector } from 'react-resize-detector'
 import { ValueRendererDisplayMode } from '../../../reducers/Settings'
 import { Typography, Fade, Grow } from '@material-ui/core'
 
-import {ungzip} from 'node-gzip'
-import { unzip } from 'zlib'
-
 interface Props {
   message: q.Message
   treeNode: q.TreeNode<any>
@@ -56,16 +53,6 @@ class ValueRenderer extends React.Component<Props, State> {
     return [this.messageToPrettyJson(str), 'json']
   }
 
-  private convertString(str: string): [string | undefined, 'json' | undefined] {
-    try {
-      JSON.parse(str)
-    } catch (error) {
-      return [str, undefined]
-    }
-
-    return [this.messageToPrettyJson(str), 'json']
-  }
-
   private messageToPrettyJson(str: string): string | undefined {
     try {
       const json = JSON.parse(str)
@@ -95,30 +82,6 @@ class ValueRenderer extends React.Component<Props, State> {
     )
   }
 
-  private async renderGZIPMode(message: q.Message, compare?: q.Message) {
-    if (!message.payload) {
-      return
-    }
-
-    var uncompstring = await ungzip(Base64Message.toUnicodeString(message.payload))
-    const [value, valueLanguage] = this.convertString(uncompstring.toString())
-    if (compare && compare.payload) {
-      uncompstring = await ungzip(Base64Message.toUnicodeString(compare.payload))
-    }
-    const [compareStr, compareStrLanguage] =
-      compare && compare.payload ? this.convertString(uncompstring.toString()) : [undefined, undefined]
-
-    return (
-      <div>
-        {this.renderDiff(value, value, undefined, valueLanguage)}
-        <Fade in={Boolean(compareStr)} timeout={400}>
-          <div>
-            {Boolean(compareStr) ? this.renderDiff(compareStr, compareStr, 'selected', compareStrLanguage) : null}
-          </div>
-        </Fade>
-      </div>
-    )
-  }
 
   public render() {
     return <div style={{ padding: '0px 0px 8px 0px', width: '100%' }}>{this.renderValue()}</div>
@@ -132,11 +95,6 @@ class ValueRenderer extends React.Component<Props, State> {
 
     if (renderMode === 'raw') {
       return this.renderRawMode(message, compareWith)
-    }
-    if (renderMode === 'gzip') {
-      this.renderGZIPMode(message, compareWith).then((val) => {
-        return val
-      });
     }
     if (!message.payload) {
       return null

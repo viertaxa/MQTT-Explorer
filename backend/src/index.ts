@@ -11,6 +11,8 @@ import {
   removeConnection,
 } from '../../events'
 
+import {gunzipSync} from 'zlib'
+
 export class ConnectionManager {
   private connections: { [s: string]: DataSource<any> } = {}
 
@@ -42,6 +44,13 @@ export class ConnectionManager {
     const messageEvent = makeConnectionMessageEvent(connectionId)
     connection.onMessage((topic: string, payload: Buffer, packet: any) => {
       let buffer = payload
+
+      if (topic.substring(0, 2) == "gz") {
+          console.log("incoming gzip topic: " + topic)
+        // gzip buffer
+        buffer = gunzipSync(payload)
+      }
+
       if (buffer.length > 20000) {
         buffer = buffer.slice(0, 20000)
       }

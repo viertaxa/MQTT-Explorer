@@ -46,13 +46,6 @@ function ActionButtons(props: {
           </span>
         </Tooltip>
       </ToggleButton>
-      <ToggleButton className={props.classes.toggleButton} value="gzip" id="valueRendererDisplayMode-gzip">
-        <Tooltip title="GZIP">
-          <span>
-            <Reorder className={props.classes.toggleButtonIcon} />
-          </span>
-        </Tooltip>
-      </ToggleButton>
     </ToggleButtonGroup>
   )
 }

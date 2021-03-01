@@ -66,7 +66,7 @@ export const selectTopicWithMouseOver = (doSelect: boolean) => (dispatch: Dispat
   dispatch(storeSettings())
 }
 
-export const setValueDisplayMode = (valueRendererDisplayMode: 'diff' | 'raw' | 'gzip') => (dispatch: Dispatch<any>) => {
+export const setValueDisplayMode = (valueRendererDisplayMode: 'diff' | 'raw') => (dispatch: Dispatch<any>) => {
   dispatch({
     valueRendererDisplayMode,
     type: ActionTypes.SETTINGS_SET_VALUE_RENDERER_DISPLAY_MODE,

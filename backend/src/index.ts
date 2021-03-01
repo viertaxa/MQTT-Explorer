@@ -45,9 +45,11 @@ export class ConnectionManager {
     connection.onMessage((topic: string, payload: Buffer, packet: any) => {
       let buffer = payload
 
-      if (topic.substring(0, 2) == "gz") {
-        // gzip buffer
-        buffer = gunzipSync(payload)
+      try {
+        buffer = gunzipSync(payload)        
+      }
+      catch {
+        // ignore for now
       }
 
       if (buffer.length > 20000) {

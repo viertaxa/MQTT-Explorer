@@ -8,7 +8,7 @@ export enum TopicOrder {
   topics = '#topics',
 }
 
-export type ValueRendererDisplayMode = 'diff' | 'raw'
+export type ValueRendererDisplayMode = 'diff' | 'raw' | 'gzip'
 export interface SettingsStateModel {
   autoExpandLimit: number
   timeLocale: string

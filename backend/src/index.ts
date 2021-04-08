@@ -46,7 +46,17 @@ export class ConnectionManager {
       let buffer = payload
 
       try {
-        buffer = gunzipSync(payload)        
+        var gzipBuffer = gunzipSync(payload)
+
+        let decompressedLength = Buffer.byteLength(gzipBuffer)
+        var lengthObject = ",\"stats\": {\"original\": " + Buffer.byteLength(payload) + ",\"decompressed\":" + decompressedLength + "}}"
+
+        var removeAmount = 1
+        if (gzipBuffer.lastIndexOf(']') == decompressedLength - 1) {
+          lengthObject += "]"
+          removeAmount++
+        }
+        buffer = Buffer.concat([gzipBuffer.slice(0, decompressedLength - removeAmount), Buffer.from(lengthObject)])
       }
       catch {
         // ignore for now
